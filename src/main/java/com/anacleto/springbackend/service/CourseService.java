@@ -3,7 +3,6 @@ package com.anacleto.springbackend.service;
 import com.anacleto.springbackend.dto.CourseDTO;
 import com.anacleto.springbackend.dto.mapper.CourseMapper;
 import com.anacleto.springbackend.exception.RecordNotFoundException;
-import com.anacleto.springbackend.model.Course;
 import com.anacleto.springbackend.repository.CourseRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -13,11 +12,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Validated
 @Service
 public class CourseService {
+
+    private static final String ERROR_MESSAGE = "Course with id %s not found!";
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
@@ -31,14 +31,14 @@ public class CourseService {
         return courseRepository.findAll()
                             .stream()
                             .map(courseMapper::toDTO)
-                            .collect(Collectors.toList());
+                            .toList();
     }
 
     public CourseDTO findCourseById(@PathVariable @NotNull @Positive Long id) {
         return this.courseRepository.findById(id)
                                     .map(courseMapper::toDTO)
                                     .orElseThrow(
-                                        () -> new RecordNotFoundException("Course with id " + id + " not found!"));
+                                        () -> new RecordNotFoundException(String.format(ERROR_MESSAGE, id)));
     }
 
     public CourseDTO createCourse(@Valid @NotNull CourseDTO courseDTO) {
@@ -55,7 +55,7 @@ public class CourseService {
 
                         return courseMapper.toDTO(this.courseRepository.save(courseFound));
                     }).orElseThrow(
-                        () -> new RecordNotFoundException("Course with id " + id + " not found!")
+                        () -> new RecordNotFoundException(String.format(ERROR_MESSAGE, id))
                     );
     }
 
@@ -63,7 +63,7 @@ public class CourseService {
         this.courseRepository.delete(
             this.courseRepository.findById(id)
                                 .orElseThrow(
-                                    () -> new RecordNotFoundException("Course with id " + id + " not found!")
+                                    () -> new RecordNotFoundException(String.format(ERROR_MESSAGE, id))
                                 )
         );
     }
