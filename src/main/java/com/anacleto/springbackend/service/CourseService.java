@@ -38,7 +38,8 @@ public class CourseService {
         return this.courseRepository.findById(id)
                                     .map(courseMapper::toDTO)
                                     .orElseThrow(
-                                        () -> new RecordNotFoundException(String.format(ERROR_MESSAGE, id)));
+                                        () -> new RecordNotFoundException(String.format(ERROR_MESSAGE, id))
+                                    );
     }
 
     public CourseDTO createCourse(@Valid @NotNull CourseDTO courseDTO) {
