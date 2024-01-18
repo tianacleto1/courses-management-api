@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class CourseService {
                             .toList();
     }
 
-    public CourseDTO findCourseById(@PathVariable @NotNull @Positive Long id) {
+    public CourseDTO findCourseById(@NotNull @Positive Long id) {
         return this.courseRepository.findById(id)
                                     .map(courseMapper::toDTO)
                                     .orElseThrow(
@@ -52,7 +51,7 @@ public class CourseService {
         return this.courseRepository.findById(id)
                     .map(courseFound -> {
                         courseFound.setName(courseDTO.name());
-                        courseFound.setCategory(courseDTO.category());
+                        courseFound.setCategory(this.courseMapper.convertCategoryValue(courseDTO.category()));
 
                         return courseMapper.toDTO(this.courseRepository.save(courseFound));
                     }).orElseThrow(
@@ -60,7 +59,7 @@ public class CourseService {
                     );
     }
 
-    public void deleteCourse(@PathVariable @NotNull @Positive Long id) {
+    public void deleteCourse(@NotNull @Positive Long id) {
         this.courseRepository.delete(
             this.courseRepository.findById(id)
                                 .orElseThrow(

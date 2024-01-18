@@ -1,5 +1,6 @@
 package com.anacleto.springbackend;
 
+import com.anacleto.springbackend.enums.Category;
 import com.anacleto.springbackend.model.Course;
 import com.anacleto.springbackend.repository.CourseRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +21,7 @@ public class SpringBackendApplication {
 			courseRepository.deleteAll();
 			Course course = new Course();
 			course.setName("Fullstack Angular and Spring");
-			course.setCategory("Front-end");
+			course.setCategory(Category.FRONT_END);
 
 			courseRepository.save(course);
 		};

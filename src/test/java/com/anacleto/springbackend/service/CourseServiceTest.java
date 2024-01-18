@@ -3,6 +3,7 @@ package com.anacleto.springbackend.service;
 
 import com.anacleto.springbackend.dto.CourseDTO;
 import com.anacleto.springbackend.dto.mapper.CourseMapper;
+import com.anacleto.springbackend.enums.Category;
 import com.anacleto.springbackend.exception.RecordNotFoundException;
 import com.anacleto.springbackend.model.Course;
 import com.anacleto.springbackend.repository.CourseRepository;
@@ -128,7 +129,7 @@ class CourseServiceTest {
         Course course = new Course();
         course.setId(1L);
         course.setName("Fullstack Angular and Spring");
-        course.setCategory("Front-end");
+        course.setCategory(Category.FRONT_END);
 
         return course;
     }
